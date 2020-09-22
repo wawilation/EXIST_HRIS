@@ -1,0 +1,62 @@
+hydra_dev=# select * from leaves.leave_request where created_date > '2020-07-30' and created_date < '2020-08-01';
+(0 rows)
+
+
+
+hydra_dev=# select * from leaves.leave_request where employee_number = '2019-731' order by created_date desc;
+-[ RECORD 1 ]----+----------------------------------------------------------------------------
+id               | 580585
+deleted          | N
+created_by       | 
+created_date     | 2020-07-29 06:52:02
+updated_date     | 2020-07-29 00:11:50
+updated_by       | 
+version          | 0
+employee_number  | 2019-731
+leave_date       | 2020-07-30
+leave_period     | 1.00
+responded_by     | 2006-120
+response_date    | 2020-07-29
+filing_status    | APPROVED
+leave_allocation | 79193
+reason           | Processing of gov't documents
+remarks          | 
+parent_id        | 
+part_of_day      | 
+is_paid          | Y
+timesheet_id     | 
+
+
+select * from leaves.leave_request where employee_number = '2015-580' order by created_date desc;
+hydra_dev=# select * from leaves.leave_request where employee_number = '2015-580' order by created_date desc;
+-[ RECORD 1 ]----+-----------------------------------------------------------------------------------------
+id               | 581051
+deleted          | N
+created_by       | 
+created_date     | 2020-01-30 18:28:19
+updated_date     | 2020-01-31 09:58:12
+updated_by       | 
+version          | 0
+employee_number  | 2015-580
+leave_date       | 2020-01-31
+leave_period     | 1.00
+responded_by     | 2016-657
+response_date    | 2020-01-31
+filing_status    | APPROVED
+leave_allocation | 79444
+reason           | birthday leave
+remarks          | 
+parent_id        | 
+part_of_day      | 
+is_paid          | Y
+
+
+
+
+select * FROM employee_truancy_details X JOIN employees Z 
+ON X.employee_id = Z.id WHERE X.response = 'Approved' and Z.employee_code = '2019-731' order by X.created_on desc;
+
+select * FROM employee_truancy_details X JOIN employees Z 
+ON X.employee_id = Z.id WHERE X.response = 'Approved' and Z.employee_code = '2015-580' order by X.created_on desc;
+
+

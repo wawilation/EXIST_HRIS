@@ -1,0 +1,12 @@
+EXPLAIN ANALYZE SELECT Y.id AS timesheet_id, Z.employee_code, X.work_details, X.date_filed, X.duration, X.duration_approved, Y.overtime_minutes_applied FROM employee_overtimes X JOIN employee_timesheets Y on X.employee_id = Y.employee_id JOIN employees Z ON Y.employee_id = Z.id WHERE X.status = 'Approved';
+
+--egemsdb
+CREATE INDEX idx_employee_id_employee_overtimes ON employee_overtimes (employee_id);
+CREATE INDEX idx_status_employee_overtimes ON employee_overtimes (status);
+
+CREATE INDEX idx_employee_id_employee_timesheets ON employee_timesheets (employee_id);
+
+
+--hydra_dev
+CREATE INDEX idx_date_empnum_timesheet ON timekeeping.timesheet (date, employee_number);
+

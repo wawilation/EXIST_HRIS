@@ -1,0 +1,32 @@
+
+
+egems:198.24.176.100
+
+pgloader --summary /tmp/summary.txt --verbose mysql://root:v1ofc502[]\!@198.24.176.100:3306/egemsdb postgresql://postgres@127.0.0.1/egemsdb
+
+v1ofc502[]!
+
+create user root@203.87.133.145 IDENTIFIED BY "v1ofc502[]!"; 
+grant all on egemsdb.* TO root@203.87.133.145;
+flush privileges;
+quit;
+
+
+
+
+create user root@104.43.9.150 IDENTIFIED BY "v1ofc502[]!"; 
+grant all on egemsdb.* TO root@104.43.9.150;
+flush privileges;
+quit;
+
+
+
+
+pgloader --summary /tmp/summary.txt --verbose mysql://root:v1ofc502[]\!@198.24.176.100:3306/egemsdb postgresql://postgres@172.16.0.91/egemsdb
+
+
+v1ofc502[]!
+
+
+
+pgloader --summary /tmp/summary.txt --verbose mysql://root:v1ofc502[]\!@198.24.176.100:3306/egemsdb?tablename=employee_timesheets postgresql://postgres@172.16.0.91/egemsdb_temp

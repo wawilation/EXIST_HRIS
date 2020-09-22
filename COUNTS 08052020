@@ -1,0 +1,83 @@
+/****timekeeping.timesheet****/
+--egemsdb
+SELECT * FROM
+dblink ('user=postgres password=postgres dbname=egemsdb', 'SELECT COUNT(*) FROM employee_timesheets') AS linktable (count bigint);
+--490288
+
+--hydra
+SELECT COUNT(*) FROM timekeeping.timesheet;
+--490287
+
+egemsdb=# select * from employee_timesheets where date is null;
+ id  | employee_id | date | time_in | time_out | duration | remarks | is_late | minutes_late | is_undertime | minutes_undertime | created_on | created_by | updated_on | updated_by | is_valid | is_day
+_awol | is_am_awol | is_pm_awol | minutes_excess | is_excess_minutes_applied | allowance_minutes_applied | overtime_minutes_applied | shift_schedule_id | shift_schedule_detail_id | next_day_shift_sch
+edule_id | next_day_shift_schedule_detail_id 
+-----+-------------+------+---------+----------+----------+---------+---------+--------------+--------------+-------------------+------------+------------+------------+------------+----------+-------
+------+------------+------------+----------------+---------------------------+---------------------------+--------------------------+-------------------+--------------------------+-------------------
+---------+-----------------------------------
+ 197 |           0 |      |         |          |        0 |         |       0 |            0 |            0 |                 0 |            |          0 |            |            |        0 |       
+    0 |          0 |          0 |              0 |                         0 |                         0 |                        0 |                 0 |                        0 |                   
+       0 |                                 0
+(1 row)
+
+
+/*****timekeeping.overtime_application*****/
+--egemsdb
+SELECT * FROM
+dblink ('user=postgres password=postgres dbname=egemsdb', 'SELECT COUNT(*) FROM employee_overtimes WHERE status = ''Approved''') AS linktable (count bigint);
+--9648
+
+--hydra
+SELECT COUNT(*) FROM timekeeping.overtime_application;
+--9651
+
+
+/*****leaves.leave_allocation*****/
+--egemsdb
+
+SELECT * FROM
+dblink ('user=postgres password=postgres dbname=egemsdb', 'SELECT COUNT(*) FROM employee_truancies') AS linktable (count bigint);
+--6092
+
+--hydra
+SELECT COUNT(*) FROM leaves.leave_allocation;
+--6092
+
+/*****leaves.leave_request*****/
+--egemsdb
+SELECT * FROM
+dblink ('user=postgres password=postgres dbname=egemsdb', 'SELECT COUNT(*) FROM employee_truancy_details WHERE response = ''Approved''') AS linktable (count bigint);
+--22593
+
+--hydra
+SELECT COUNT(*) FROM leaves.leave_request;
+--29665
+
+
+/*****records.job_designation_reference*****/
+--egemsdb
+SELECT * FROM
+dblink ('user=postgres password=postgres dbname=egemsdb', 'SELECT COUNT(*) FROM job_positions') AS linktable (count bigint);
+--178
+
+--hydra
+SELECT COUNT(*) FROM records.job_designation_reference;
+--178
+
+
+
+
+
+
+/*****records.employee*****/
+--egemsdb
+SELECT * FROM
+dblink ('user=postgres password=postgres dbname=egemsdb', 'SELECT COUNT(*) FROM employees') AS linktable (count bigint);
+--764
+
+--hydra
+SELECT COUNT(*) FROM records.employee;
+--764
+
+
+

@@ -1,0 +1,238 @@
+SELECT 
+	Y.date_of_overtime, 
+	Z.employee_code, 
+	X.work_details, 
+	X.date_filed, 
+	X.duration, 
+	X.duration_approved,
+	Y.overtime_minutes_applied 
+FROM employee_overtimes X JOIN employee_timesheets Y 
+	on X.employee_id = Y.employee_id AND
+	X.date_of_overtime = Y.date
+JOIN employees Z 
+	ON Y.employee_id = Z.id 
+WHERE X.status = 'Approved';
+
+SELECT 
+count(*)
+FROM employee_overtimes X JOIN employee_timesheets Y 
+	on X.employee_id = Y.employee_id AND
+	X.date_of_overtime = Y.date
+JOIN employees Z 
+	ON Y.employee_id = Z.id 
+WHERE X.status = 'Approved';
+--9,647
+
+
+SELECT 
+count(*)
+FROM employee_overtimes X JOIN employee_timesheets Y 
+	on X.employee_id = Y.employee_id AND
+	X.date_of_overtime = Y.date;
+--11,583
+
+
+------
+
+SELECT Y.employee_code, X.date_from, X.date_to, X.leave_type, X.leaves_allocated FROM employee_truancies X JOIN employees Y ON X.employee_id = Y.id;
+
+INSERT INTO leaves.leave_reference
+SELECT *
+FROM dblink ('user=postgres password=postgres dbname=hydra', 'SELECT * FROM leaves.leave_reference;') AS linktable
+(id bigint,
+ deleted character(1),
+ code character varying(255),
+ description character varying(255));
+
+
+
+egemsdb=# select distinct leave_type from employee_truancies;
+   leave_type    
+-----------------
+ Vacation Leave
+ Maternity Leave
+ Sick Leave
+ Paternity Leave
+ Emergency Leave
+(5 rows)
+
+hydra_dev=# select * from leaves.leave_reference;
+  id  | deleted | code | description 
+------+---------+------+-------------
+ 1002 | N       | VL   | Vacation
+ 1001 | N       | SL   | Sick
+ 1003 | N       | BL   | Birthday
+ 1004 | N       | EL   | Emergency
+ 1005 | N       | BrL  | Bereavement
+ 1006 | N       | ML   | Maternity
+ 1007 | N       | PL   | Paternity
+ 1008 | N       | SPL  | Solo Parent
+(8 rows)
+
+
+
+/**************/
+
+
+id, deleted, created_by, created_date, updated_date, updated_by, version, employee_number, leave_date, leave_period, responded_by, response_date, filing_status, leave_allocation, reason, remarks, parent_id, part_of_day, is_paid, timesheet_id
+
+
+SELECT COUNT(1) FROM employee_truancy_details WHERE status = 'Approved';
+
+egemsdb=# SELECT COUNT(1) FROM employee_truancy_details;
+ count 
+-------
+ 24966
+(1 row)
+
+egemsdb=# 
+egemsdb=# SELECT COUNT(1) FROM
+egemsdb-# employee_truancies A JOIN employee_truancy_details B on A.employee_id = B.employee_id AND A.id = B.employee_truancy_id;
+ count 
+-------
+ 24966
+(1 row)
+
+
+
+SELECT X.employee_truancy_id, X.leave_date, X.leave_unit, X.response, X.responded_on, Y.employee_code, X.details, X.period FROM employee_truancy_details X JOIN employee_truancies Y ON X.employee_id = Y.employee_id AND X.employee_truancy_id = Y.id JOIN employees Z ON X.actual_responder_id = Z.id ;
+
+
+
+SELECT COUNT(1) 
+FROM employee_truancy_details X JOIN employee_truancies Y 
+	ON X.employee_id = Y.employee_id AND X.employee_truancy_id = Y.id
+JOIN employees Z ON X.actual_responder_id = Z.id ;
+
+
+
+SELECT 
+	X.employee_truancy_id, 
+	X.leave_date, 
+	X.leave_unit, 
+	X.response, 
+	X.responded_on, 
+	Z.employee_code, 
+	(SELECT W.employee_code FROM employees W WHERE W.id = X.actual_responder_id) AS responded_by,	
+	X.details, 
+	X.period 
+FROM employee_truancy_details X JOIN employee_truancies Y 
+	ON X.employee_id = Y.employee_id AND X.employee_truancy_id = Y.id 
+JOIN employees Z 
+	ON X.employee_id = Z.id;
+
+
+SELECT COUNT(1) 
+FROM employee_truancy_details X JOIN employee_truancies Y 
+	ON X.employee_id = Y.employee_id AND X.employee_truancy_id = Y.id 
+JOIN employees Z 
+	ON X.employee_id = Z.id
+WHERE X.response = 'Approved';
+--22593
+
+SELECT COUNT(1)
+FROM employee_truancy_details X JOIN employee_truancies Y 
+	ON X.employee_id = Y.employee_id AND X.employee_truancy_id = Y.id 
+JOIN employees Z 
+	ON X.employee_id = Z.id
+JOIN employees W 
+	ON X.actual_responder_id = Z.id;
+
+
+
+/*******/
+
+    "FK9i3uts1bxvv4nqge1h7javqtv" FOREIGN KEY (job_level_code) REFERENCES records.job_level_reference(code)
+    "FKdr33i8x9f7j7tt86v4jkarg0p" FOREIGN KEY (job_designation_code) REFERENCES records.job_designation_reference(code)
+    "FKfr73suk0ew0mhsm7to6qe80rh" FOREIGN KEY (department_code) REFERENCES records.department_reference(code)
+
+
+INSERT INTO records.branch_reference
+SELECT *
+FROM dblink ('user=postgres password=postgres dbname=hydra', 'SELECT * FROM records.branch_reference;') AS linktable
+(id bigint,
+ deleted character(1),
+ code character varying(255),
+ description character varying(255));
+
+
+INSERT INTO records.shift_schedule
+SELECT *
+FROM dblink ('user=postgres password=postgres dbname=hydra', 'SELECT * FROM records.shift_schedule;') AS linktable
+( id bigint,
+ deleted character(1),
+ created_by character varying(50),
+ created_date timestamp without time zone,
+ updated_date timestamp without time zone,
+ updated_by character varying(250),
+ version bigint,
+ name character varying(255));
+
+INSERT INTO records.job_level_reference
+SELECT *
+FROM dblink ('user=postgres password=postgres dbname=hydra', 'SELECT * FROM records.job_level_reference;') AS linktable
+(id bigint,
+ deleted character(1),
+ code character varying(255),
+ description character varying(255),
+ rank bigint);
+
+
+INSERT INTO records.department_reference
+SELECT *
+FROM dblink ('user=postgres password=postgres dbname=hydra', 'SELECT * FROM records.department_reference;') AS linktable
+(id bigint,
+ deleted character(1),
+ code character varying(255),
+ description character varying(255));
+
+
+INSERT INTO leaves.leave_policy
+SELECT *
+FROM dblink ('user=postgres password=postgres dbname=hydra', 'SELECT * FROM leaves.leave_policy;') AS linktable
+(id bigint,
+deleted character(1),
+created_by character varying(50), 
+created_date timestamp without time zone, 
+updated_date timestamp without time zone, 
+updated_by character varying(250), 
+version bigint, 
+is_active character(1), 
+auto_apply_value character varying(255), 
+is_auto_apply character(1), 
+count numeric(19,2), 
+is_default character(1), 
+increment numeric(19,2), 
+leave_increment_app numeric(19,2), 
+leave_credit_app character varying(255), 
+leave_increment character varying(255), 
+leave_limit numeric(19,2), 
+pro_rated numeric(19,2), 
+leave_name bigint, 
+is_calendar_day character(1), 
+is_continuous character(1), 
+linked_policy bigint);
+
+
+INSERT INTO timekeeping.timekeeping_reference_data
+SELECT *
+FROM dblink ('user=postgres password=postgres dbname=hydra', 'SELECT * FROM timekeeping.timekeeping_reference_data') AS linktable
+(id bigint,
+deleted character(1),
+created_by character varying(50),
+created_date timestamp without time zone,
+updated_date timestamp without time zone,
+updated_by character varying(250),
+version bigint,
+key character varying(255),
+value character varying(255));
+
+
+
+
+
+
+
+
+
+
